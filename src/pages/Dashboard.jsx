@@ -1,77 +1,97 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
-  const [acciones, setAcciones] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [pageNumber, setPageNumber] = useState(1);
-  const pageSize = 10;
+    const { logout } = useAuth();
+    const [acciones, setAcciones] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [pageNumber, setPageNumber] = useState(1);
+    const pageSize = 10;
 
-  const fetchAcciones = async () => {
-    try {
-      setLoading(true);
-      setError("");
+    const fetchAcciones = async () => {
+        try {
+            setLoading(true);
+            setError("");
 
-      const response = await api.get(
-        `/api/v1/actions/admin-list?pageNumber=${pageNumber}&pageSize=${pageSize}`
-      );
+            const response = await api.get(
+                `/api/v1/actions/admin-list?pageNumber=${pageNumber}&pageSize=${pageSize}`
+            );
 
-      setAcciones(response.data?.items || response.data || []);
-    } catch (err) {
-      setError("Error al cargar las acciones");
-    } finally {
-      setLoading(false);
-    }
-  };
+            setAcciones(response.data?.items || response.data || []);
+        } catch (err) {
+            setError("Error al cargar las acciones");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  useEffect(() => {
-    fetchAcciones();
-  }, [pageNumber]);
+    useEffect(() => {
+        fetchAcciones();
+    }, [pageNumber]);
 
-  return (
-    <div style={{ padding: "20px", minHeight: "100vh" }}>
-      <h2>Dashboard</h2>
+    return (
+        <div style={{ padding: "20px", minHeight: "100vh" }}>
+            {/* BOTÓN LOGOUT */}
+            <button
+                onClick={logout}
+                style={{
+                    marginBottom: 20,
+                    padding: "6px 12px",
+                    backgroundColor: "#e53935",
+                    color: "white",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                }}
+            >
+                Cerrar sesión
+            </button>
 
-      {loading && <p>Cargando acciones...</p>}
-      {error && <p>{error}</p>}
+            <h2>Dashboard</h2>
 
-      {!loading && !error && acciones.length === 0 && (
-        <p>No hay acciones disponibles</p>
-      )}
+            {loading && <p>Cargando acciones...</p>}
+            {error && <p>{error}</p>}
 
-      {!loading && !error && acciones.length > 0 && (
-        <ul>
-          {acciones.map((accion, index) => (
-            <li key={accion.id || index}>
-              {accion.name || accion.title || "Acción sin nombre"}
-            </li>
-          ))}
-        </ul>
-      )}
+            {!loading && !error && acciones.length === 0 && (
+                <p>No hay acciones disponibles</p>
+            )}
 
-      <div
-        style={{
-          marginTop: 30,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 10,
-        }}
-      >
-        <button
-          onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
-          disabled={pageNumber === 1}
-        >
-          Anterior
-        </button>
+            {!loading && !error && acciones.length > 0 && (
+                <ul>
+                    {acciones.map((accion, index) => (
+                        <li key={accion.id || index}>
+                            {accion.name || accion.title || "Acción sin nombre"}
+                        </li>
+                    ))}
+                </ul>
+            )}
 
-        <span>Página {pageNumber}</span>
+            {/* PAGINACIÓN */}
+            <div
+                style={{
+                    marginTop: 30,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 10,
+                }}
+            >
+                <button
+                    onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
+                    disabled={pageNumber === 1}
+                >
+                    Anterior
+                </button>
 
-        <button onClick={() => setPageNumber((prev) => prev + 1)}>
-          Siguiente
-        </button>
-      </div>
-    </div>
-  );
+                <span>Página {pageNumber}</span>
+
+                <button onClick={() => setPageNumber((prev) => prev + 1)}>
+                    Siguiente
+                </button>
+            </div>
+        </div>
+    );
+
 }
