@@ -1,11 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function Login() {
   const { login, loading } = useAuth();
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -16,13 +14,14 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     setError("");
-    const result = await login(data);
 
-    if (result.success) {
-      navigate("/");
-    } else {
+    const result = await login(data.username, data.password);
+
+    if (!result.success) {
       setError(result.message);
     }
+    // ❌ NO navigate()
+    // AppRoutes se encarga de redirigir
   };
 
   return (

@@ -1,16 +1,59 @@
-# React + Vite
+# Prueba Técnica Frontend - React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto corresponde a una prueba técnica de frontend desarrollada en **React**.  
+Incluye autenticación, rutas protegidas, dashboard con paginación y formulario de creación de acciones.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+##  Tecnologías utilizadas
 
-## React Compiler
+- React + Vite
+- React Router DOM
+- Axios
+- React Hook Form
+- Context API
+- JavaScript
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+##  Autenticación
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Login contra API externa
+- Manejo de token JWT
+- Token persistido en `localStorage`
+- Rutas protegidas según estado de autenticación
+- Botón de cierre de sesión (logout)
+
+---
+
+##  Dashboard
+
+- Listado de acciones desde API
+- Manejo de estados: loading, error y vacío
+- Paginación usando `pageNumber` y `pageSize`
+- UI estable incluso cuando el backend responde con error
+
+---
+
+##  Crear Acción
+
+- Formulario controlado con validaciones
+- Envío de datos mediante POST
+- Manejo de loading y mensajes de error / éxito
+- Acceso protegido por autenticación
+
+---
+
+##  Notas importantes
+
+- El endpoint de listado de acciones puede devolver error dependiendo del entorno.
+- Dicho error se maneja correctamente en la UI sin romper la aplicación.
+- Las credenciales de login utilizadas son las proporcionadas en la prueba técnica.
+
+---
+
+##  Cómo ejecutar el proyecto
+
+```bash
+npm install
+npm run dev

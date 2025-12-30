@@ -1,38 +1,37 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import api from "../api/axios";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("token");
-  });
-  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (token) {
-      localStorage.setItem("token", token);
-      setIsAuthenticated(true);
-    } else {
-      localStorage.removeItem("token");
-      setIsAuthenticated(false);
-    }
-  }, [token]);
-
-  const login = async (credentials) => {
-    setLoading(true);
+  const login = async (username, password) => {
     try {
-      const response = await api.post(
-        "https://dev.apinetbo.bekindnetwork.com/api/Authentication/Login",
-        credentials
-      );
-      console.log("Respuesta login:", response.data);
+      setLoading(true);
 
-      const accessToken = response.data?.token || response.data?.accessToken;
+      const response = await api.post(
+        "/api/Authentication/Login",
+        {
+          username,
+          password,
+        }
+      );
+
+      // 🔑 EL BACKEND DEVUELVE EL TOKEN COMO STRING
+      const accessToken = response.data;
+
+      if (!accessToken) {
+        throw new Error("Token no recibido");
+      }
+
+      localStorage.setItem("token", accessToken);
       setToken(accessToken);
+
       return { success: true };
     } catch (error) {
+      console.error("Error en login:", error);
       return {
         success: false,
         message: "Credenciales inválidas",
@@ -43,6 +42,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
     setToken(null);
   };
 
@@ -50,10 +50,9 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         token,
-        isAuthenticated,
-        loading,
         login,
         logout,
+        loading,
       }}
     >
       {children}

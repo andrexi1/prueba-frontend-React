@@ -1,34 +1,30 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
-
-
-
-
-function ProtectedRoute({ children }) {
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return children;
-}
+import { useAuth } from "../context/AuthContext";
+import CreateAction from "../pages/CreateAction";
 
 export default function AppRoutes() {
-  return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
+    const { token } = useAuth();
 
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-  );
+    return (
+        <Routes>
+            <Route
+                path="/login"
+                element={token ? <Navigate to="/" /> : <Login />}
+            />
+
+            <Route
+                path="/"
+                element={token ? <Dashboard /> : <Navigate to="/login" />}
+            />
+
+            <Route path="*" element={<Navigate to="/" />} />
+
+            <Route
+                path="/crear-accion"
+                element={token ? <CreateAction /> : <Navigate to="/login" />}
+            />
+        </Routes>
+    );
 }
