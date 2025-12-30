@@ -1,9 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Login from "../pages/Login";
 
-function Login() {
-  return <h2>Página de Login</h2>;
-}
 
 function Dashboard() {
   return <h2>Dashboard</h2>;
