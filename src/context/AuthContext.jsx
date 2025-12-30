@@ -27,6 +27,7 @@ export function AuthProvider({ children }) {
         "https://dev.apinetbo.bekindnetwork.com/api/Authentication/Login",
         credentials
       );
+      console.log("Respuesta login:", response.data);
 
       const accessToken = response.data?.token || response.data?.accessToken;
       setToken(accessToken);
