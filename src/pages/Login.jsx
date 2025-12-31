@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import "../styles/login.css";
+
 
 export default function Login() {
   const { login, loading } = useAuth();
@@ -20,39 +22,33 @@ export default function Login() {
     if (!result.success) {
       setError(result.message);
     }
-    // ❌ NO navigate()
-    // AppRoutes se encarga de redirigir
+
   };
 
-  return (
-    <div style={{ maxWidth: 400, margin: "100px auto" }}>
+ return (
+  <div className="login-container">
+    <div className="login-card">
       <h2>Iniciar sesión</h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label>Usuario</label>
-          <input
-            type="email"
-            {...register("username", { required: "El usuario es requerido" })}
-          />
-          {errors.username && <p>{errors.username.message}</p>}
+        <div className="login-field">
+          <label>Correo electrónico</label>
+          <input type="email" {...register("username", { required: true })} />
         </div>
 
-        <div>
+        <div className="login-field">
           <label>Contraseña</label>
-          <input
-            type="password"
-            {...register("password", { required: "La contraseña es requerida" })}
-          />
-          {errors.password && <p>{errors.password.message}</p>}
+          <input type="password" {...register("password", { required: true })} />
         </div>
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <button type="submit" disabled={loading}>
+        <button className="login-button" disabled={loading}>
           {loading ? "Ingresando..." : "Ingresar"}
         </button>
       </form>
     </div>
-  );
+  </div>
+);
+
 }

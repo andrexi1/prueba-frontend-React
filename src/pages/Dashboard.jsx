@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import "../styles/dashboard.css";
+
 
 export default function Dashboard() {
     const { logout } = useAuth();
@@ -32,27 +34,18 @@ export default function Dashboard() {
     }, [pageNumber]);
 
     return (
-        <div style={{ padding: "20px", minHeight: "100vh" }}>
-            {/* BOTÓN LOGOUT */}
-            <button
-                onClick={logout}
-                style={{
-                    marginBottom: 20,
-                    padding: "6px 12px",
-                    backgroundColor: "#e53935",
-                    color: "white",
-                    border: "none",
-                    borderRadius: 4,
-                    cursor: "pointer",
-                }}
-            >
-                Cerrar sesión
-            </button>
-
+        <div className="dashboard">
             <h2>Dashboard</h2>
 
+            {/* MENSAJES */}
             {loading && <p>Cargando acciones...</p>}
-            {error && <p>{error}</p>}
+
+            {error && (
+                <div className="error-box">
+                    <p>No fue posible cargar las acciones.</p>
+                    <p>Intenta nuevamente más tarde.</p>
+                </div>
+            )}
 
             {!loading && !error && acciones.length === 0 && (
                 <p>No hay acciones disponibles</p>
@@ -68,18 +61,10 @@ export default function Dashboard() {
                 </ul>
             )}
 
-            {/* PAGINACIÓN */}
-            <div
-                style={{
-                    marginTop: 30,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: 10,
-                }}
-            >
+            {/*  CONTROLES — FUERA DE TODAS LAS CONDICIONES */}
+            <div className="dashboard-controls">
                 <button
-                    onClick={() => setPageNumber((prev) => Math.max(prev - 1, 1))}
+                    onClick={() => setPageNumber((p) => Math.max(p - 1, 1))}
                     disabled={pageNumber === 1}
                 >
                     Anterior
@@ -87,8 +72,12 @@ export default function Dashboard() {
 
                 <span>Página {pageNumber}</span>
 
-                <button onClick={() => setPageNumber((prev) => prev + 1)}>
+                <button onClick={() => setPageNumber((p) => p + 1)}>
                     Siguiente
+                </button>
+
+                <button className="logout-btn" onClick={logout}>
+                    Cerrar sesión
                 </button>
             </div>
         </div>

@@ -54,6 +54,15 @@ Incluye autenticación, rutas protegidas, dashboard con paginación y formulario
 
 ##  Cómo ejecutar el proyecto
 
+1. Instalar dependencias:
 ```bash
-npm install
+npm install 
+
+2. Ejecutar el proyecto en modo desarrollo:
+
 npm run dev
+
+
+3. Acceder a la aplicación en el navegador:
+
+http://localhost:5173

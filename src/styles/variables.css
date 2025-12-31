@@ -1,0 +1,10 @@
+:root {
+  --primary: #1e1b4b;     /* azul oscuro */
+  --primary-light: #4338ca;
+  --background: #f8fafc;
+  --card-bg: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --danger: #e53935;
+}
