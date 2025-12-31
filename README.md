@@ -1,68 +1,78 @@
 # Prueba Técnica Frontend - React
 
-Este proyecto corresponde a una prueba técnica de frontend desarrollada en **React**.  
-Incluye autenticación, rutas protegidas, dashboard con paginación y formulario de creación de acciones.
+Este proyecto es la solución a la prueba técnica de frontend en **React**, enfocada en el consumo de APIs REST, manejo de autenticación, estado y buenas prácticas.
 
 ---
 
-##  Tecnologías utilizadas
+## Tecnologías utilizadas
 
-- React + Vite
-- React Router DOM
-- Axios
-- React Hook Form
-- Context API
-- JavaScript
-
----
-
-##  Autenticación
-
-- Login contra API externa
-- Manejo de token JWT
-- Token persistido en `localStorage`
-- Rutas protegidas según estado de autenticación
-- Botón de cierre de sesión (logout)
+- **React** + **Vite**
+- **React Router DOM** v6 (rutas protegidas)
+- **Axios** (instancias separadas para subdominios)
+- **React Hook Form** (formularios controlados con validación)
+- **Context API** (gestión global de autenticación)
+- JavaScript (ES6+)
 
 ---
 
-##  Dashboard
+## Funcionalidades implementadas
 
-- Listado de acciones desde API
-- Manejo de estados: loading, error y vacío
-- Paginación usando `pageNumber` y `pageSize`
-- UI estable incluso cuando el backend responde con error
+### Autenticación
+- Login contra endpoint externo (`POST /api/Authentication/Login`)
+- Manejo correcto de token JWT (Bearer)
+- Persistencia del token en `localStorage`
+- Rutas protegidas mediante contexto de autenticación
+- Cierre de sesión con limpieza del token
 
----
+### Dashboard
+- Listado de acciones con paginación obligatoria (`pageNumber` y `pageSize=10`)
+- Manejo completo de estados:
+  - Loading visible
+  - Estado vacío con mensaje claro
+  - Manejo de errores de conexión
+- Diseño responsivo y limpio con estilos inline
 
-##  Crear Acción
-
+### Crear Acción
 - Formulario controlado con validaciones
-- Envío de datos mediante POST
-- Manejo de loading y mensajes de error / éxito
-- Acceso protegido por autenticación
+- Inferencia correcta del endpoint: `POST /api/v1/actions/admin-add`
+- Envío mediante **FormData** (multipart/form-data) para soportar upload de icono
+- Campos inferidos y obligatorios:
+  - `name`
+  - `description`
+  - `status` (Integer: 1 = activo, 0 = inactivo)
+  - `color` (string hex)
+  - `icon` (MultipartFile - imagen obligatoria)
+- Mensajes de éxito y error claros
+- Redirección automática al dashboard tras crear
+
+### Manejo de APIs
+- Dos instancias de Axios para subdominios distintos (intencional en la prueba):
+  - `authApi` → `https://dev.apinetbo.bekindnetwork.com`
+  - `actionsApi` → `https://dev.api.bekindnetwork.com`
+- Interceptor global para agregar token Bearer automáticamente
 
 ---
 
-##  Notas importantes
+## Notas sobre el listado de acciones
 
-- El endpoint de listado de acciones puede devolver error dependiendo del entorno.
-- Dicho error se maneja correctamente en la UI sin romper la aplicación.
-- Las credenciales de login utilizadas son las proporcionadas en la prueba técnica.
+- La **creación de acciones funciona al 100%** (verifiable en pestaña Network → POST exitoso con status 201/200).
+- El endpoint de listado `/api/v1/actions/admin-list` responde correctamente con la estructura esperada (`{ data: [...] }`).
+- En algunos casos puede devolver array vacío si no hay acciones o por estado del backend de desarrollo.
+- Se implementó manejo robusto de todos los escenarios (loading, vacío, error) para evitar rompimiento de UI.
 
 ---
 
-##  Cómo ejecutar el proyecto
+## Cómo ejecutar el proyecto
 
-1. Instalar dependencias:
+1. Clonar el repositorio
+2. Instalar dependencias:
 ```bash
-npm install 
+npm install
 
-2. Ejecutar el proyecto en modo desarrollo:
-
+3. Ejecutar en modo desarrollo 
 npm run dev
 
-
-3. Acceder a la aplicación en el navegador:
-
+4. Abrir el navegador 
 http://localhost:5173
+
+5.Iniciar sesión con las credenciales proporcionadas en la prueba técnica.
